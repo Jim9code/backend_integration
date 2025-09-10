@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../core/providers/theme_provider.dart';
+import '../../../../core/models/user_model.dart';
+import '../../../../core/providers/auth_provider.dart';
 
+/// A hub page that lists all the different settings categories.
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+    final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -16,297 +19,121 @@ class SettingsPage extends ConsumerWidget {
       ),
       body: ListView(
         children: [
-          // Appearance Section
-          _buildSectionHeader(context, 'Appearance'),
-          ListTile(
-            leading: const Icon(Icons.palette),
-            title: const Text('Theme'),
-            subtitle: Text(_getThemeModeText(themeMode)),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              _showThemeDialog(context, ref);
-            },
-          ),
-          
-          const Divider(),
-          
-          // Notifications Section
-          _buildSectionHeader(context, 'Notifications'),
-          SwitchListTile(
-            secondary: const Icon(Icons.notifications),
-            title: const Text('Push Notifications'),
-            subtitle: const Text('Receive notifications for messages and updates'),
-            value: true, // Placeholder value
-            onChanged: (value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Push notifications ${value ? 'enabled' : 'disabled'}')),
-              );
-            },
-          ),
-          SwitchListTile(
-            secondary: const Icon(Icons.email),
-            title: const Text('Email Notifications'),
-            subtitle: const Text('Receive email updates'),
-            value: false, // Placeholder value
-            onChanged: (value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Email notifications ${value ? 'enabled' : 'disabled'}')),
-              );
-            },
-          ),
-          SwitchListTile(
-            secondary: const Icon(Icons.campaign),
-            title: const Text('Marketing Notifications'),
-            subtitle: const Text('Receive promotional offers'),
-            value: true, // Placeholder value
-            onChanged: (value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Marketing notifications ${value ? 'enabled' : 'disabled'}')),
-              );
-            },
-          ),
-          
-          const Divider(),
-          
-          // Privacy Section
-          _buildSectionHeader(context, 'Privacy & Security'),
-          ListTile(
-            leading: const Icon(Icons.lock),
-            title: const Text('Change Password'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Change password not implemented')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.security),
-            title: const Text('Two-Factor Authentication'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('2FA settings not implemented')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.visibility),
-            title: const Text('Privacy Settings'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Privacy settings not implemented')),
-              );
-            },
-          ),
-          
-          const Divider(),
-          
-          // Account Section
           _buildSectionHeader(context, 'Account'),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Account Information'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Account information not implemented')),
-              );
-            },
+          _SettingsTile(
+            icon: Icons.person_outline,
+            title: 'Profile Settings',
+            onTap: () => context.go('/settings/profile'),
           ),
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: const Text('Payment Methods'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment methods not implemented')),
-              );
-            },
+          _SettingsTile(
+            icon: Icons.feed_outlined,
+            title: 'Feed Settings',
+            onTap: () => context.go('/settings/feed'),
           ),
-          ListTile(
-            leading: const Icon(Icons.subscriptions),
-            title: const Text('Subscription'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Subscription settings not implemented')),
-              );
-            },
+          _SettingsTile(
+            icon: Icons.lock_outline,
+            title: 'Change Password',
+            onTap: () => context.go('/settings/password'),
           ),
-          
+          // Conditionally show Seller Settings based on user role
+          if (currentUser?.role == UserRole.seller)
+            _SettingsTile(
+              icon: Icons.store_outlined,
+              title: 'Seller Settings',
+              onTap: () => context.go('/settings/seller'),
+            ),
           const Divider(),
-          
-          // Support Section
-          _buildSectionHeader(context, 'Support'),
-          ListTile(
-            leading: const Icon(Icons.help),
-            title: const Text('Help Center'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Help center not implemented')),
-              );
-            },
+          _buildSectionHeader(context, 'Preferences'),
+           _SettingsTile(
+            icon: Icons.palette_outlined,
+            title: 'Theme',
+            onTap: () => context.go('/settings/theme'),
           ),
-          ListTile(
-            leading: const Icon(Icons.contact_support),
-            title: const Text('Contact Support'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Contact support not implemented')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.feedback),
-            title: const Text('Send Feedback'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Send feedback not implemented')),
-              );
-            },
-          ),
-          
           const Divider(),
-          
-          // About Section
-          _buildSectionHeader(context, 'About'),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('About Ocean'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              _showAboutDialog(context);
-            },
+          _buildSectionHeader(context, 'Support & Legal'),
+          _SettingsTile(
+            icon: Icons.support_agent_outlined,
+            title: 'Contact Us',
+            onTap: () => context.go('/settings/contact'),
           ),
-          ListTile(
-            leading: const Icon(Icons.description),
-            title: const Text('Terms of Service'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Terms of service not implemented')),
-              );
-            },
+          _SettingsTile(
+            icon: Icons.gavel_outlined,
+            title: 'Legal Information',
+            onTap: () => context.go('/settings/legal'),
           ),
+          const Divider(),
           ListTile(
-            leading: const Icon(Icons.privacy_tip),
-            title: const Text('Privacy Policy'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Privacy policy not implemented')),
-              );
-            },
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+            onTap: () => _showSignOutDialog(context, ref),
           ),
-          
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
+  Padding _buildSectionHeader(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
       child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.secondary,
-          fontWeight: FontWeight.bold,
-        ),
+        title.toUpperCase(),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
       ),
     );
   }
 
-  String _getThemeModeText(ThemeMode themeMode) {
-    switch (themeMode) {
-      case ThemeMode.light:
-        return 'Light';
-      case ThemeMode.dark:
-        return 'Dark';
-      case ThemeMode.system:
-        return 'System';
-    }
-  }
-
-  void _showThemeDialog(BuildContext context, WidgetRef ref) {
-    final currentTheme = ref.read(themeModeProvider);
-    
+  void _showSignOutDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Choose Theme'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<ThemeMode>(
-              title: const Text('Light'),
-              value: ThemeMode.light,
-              groupValue: currentTheme,
-              onChanged: (value) {
-                if (value != null) {
-                  ref.read(themeModeProvider.notifier).setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Pop dialog and then call sign out.
+              // The router's redirect logic will handle navigation to the login screen.
+              context.pop();
+              ref.read(authControllerProvider.notifier).signOut();
+            },
+            child: const Text(
+              'Sign Out',
+              style: TextStyle(color: Colors.red),
             ),
-            RadioListTile<ThemeMode>(
-              title: const Text('Dark'),
-              value: ThemeMode.dark,
-              groupValue: currentTheme,
-              onChanged: (value) {
-                if (value != null) {
-                  ref.read(themeModeProvider.notifier).setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<ThemeMode>(
-              title: const Text('System'),
-              value: ThemeMode.system,
-              groupValue: currentTheme,
-              onChanged: (value) {
-                if (value != null) {
-                  ref.read(themeModeProvider.notifier).setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  void _showAboutDialog(BuildContext context) {
-    showAboutDialog(
-      context: context,
-      applicationName: 'Ocean',
-      applicationVersion: '1.0.0',
-      applicationIcon: Container(
-        width: 64,
-        height: 64,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Icon(
-          Icons.waves,
-          color: Colors.white,
-          size: 32,
-        ),
-      ),
-      children: [
-        const Text(
-          'Ocean is a social commerce platform where buyers and sellers connect. '
-          'Create posts, engage socially, and discover amazing products with AR viewing options.',
-        ),
-      ],
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: const Icon(Icons.chevron_right, size: 20),
+      onTap: onTap,
     );
   }
 }

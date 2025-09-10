@@ -18,7 +18,6 @@ import '../../features/saved/presentation/pages/saved_page.dart';
 import '../../features/chats/presentation/pages/chats_page.dart';
 import '../../features/chats/presentation/pages/chat_detail_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
-import '../../features/profile/presentation/pages/user_profile_page.dart';
 import '../../features/market_survey/presentation/pages/market_survey_page.dart';
 import '../../features/market_survey/presentation/pages/products_demand_page.dart';
 import '../../features/market_survey/presentation/pages/distress_sales_page.dart';
@@ -31,6 +30,13 @@ import '../../features/market_survey/presentation/pages/bulk_purchase_details_pa
 import '../../features/market_survey/presentation/pages/bulk_purchase_waitlist_page.dart';
 import '../../features/market_survey/presentation/pages/bulk_purchase_oops_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/settings/presentation/pages/profile_settings_page.dart';
+import '../../features/settings/presentation/pages/feed_settings_page.dart';
+import '../../features/settings/presentation/pages/change_password_page.dart';
+import '../../features/settings/presentation/pages/seller_settings_page.dart';
+import '../../features/settings/presentation/pages/theme_settings_page.dart';
+import '../../features/settings/presentation/pages/contact_us_page.dart';
+import '../../features/settings/presentation/pages/legal_info_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -160,7 +166,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/profile/:userId',
         name: 'user-profile',
-        builder: (context, state) => UserProfilePage(
+        builder: (context, state) => ProfilePage(
           userId: state.pathParameters['userId']!,
         ),
       ),
@@ -227,6 +233,43 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const SettingsPage(),
+        routes: [
+          GoRoute(
+            path: 'profile',
+            name: 'profile-settings',
+            builder: (context, state) => const ProfileSettingsPage(),
+          ),
+          GoRoute(
+            path: 'feed',
+            name: 'feed-settings',
+            builder: (context, state) => const FeedSettingsPage(),
+          ),
+          GoRoute(
+            path: 'password',
+            name: 'password-settings',
+            builder: (context, state) => const ChangePasswordPage(),
+          ),
+          GoRoute(
+            path: 'seller',
+            name: 'seller-settings',
+            builder: (context, state) => const SellerSettingsPage(),
+          ),
+          GoRoute(
+            path: 'theme',
+            name: 'theme-settings',
+            builder: (context, state) => const ThemeSettingsPage(),
+          ),
+          GoRoute(
+            path: 'contact',
+            name: 'contact-us',
+            builder: (context, state) => const ContactUsPage(),
+          ),
+          GoRoute(
+            path: 'legal',
+            name: 'legal-info',
+            builder: (context, state) => const LegalInfoPage(),
+          ),
+        ],
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
