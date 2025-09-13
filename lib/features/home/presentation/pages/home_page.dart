@@ -13,10 +13,12 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -31,21 +33,52 @@ class _HomePageState extends ConsumerState<HomePage> {
           controller: _scrollController,
           slivers: [
             SliverAppBar(
-              title: Text(
-                'BUYIT',
-                style: Theme.of(context).appBarTheme.titleTextStyle,
+              title: SizedBox(
+                height: 40,
+                child: TextField(
+                  controller: _searchController,
+                  onSubmitted: (value) {
+                    // TODO: Implement text search logic with the value
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Searching for: $value')),
+                    );
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search by product name or image...',
+                    prefixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        // TODO: Implement text search logic
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Searching for: ${_searchController.text}')),
+                        );
+                      },
+                    ),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      onPressed: () {
+                        // TODO: Implement image picker
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Opening image picker...')),
+                        );
+                      },
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
               ),
               floating: true,
               snap: true,
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Search')),
-                    );
-                  },
-                ),
                 IconButton(
                   icon: const Icon(Icons.notifications_none),
                   onPressed: () {
