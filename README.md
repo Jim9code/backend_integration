@@ -145,8 +145,8 @@ json_annotation: ^4.8.1
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter SDK (>=3.10.0)
-- Dart SDK (>=3.0.0)
+- Flutter SDK (>=3.19.0)
+- Dart SDK (>=3.3.0)
 - Android Studio / VS Code
 - Firebase project setup
 
@@ -164,7 +164,7 @@ json_annotation: ^4.8.1
 
 3. **Generate code**
    ```bash
-   flutter packages pub run build_runner build
+   dart run build_runner build --delete-conflicting-outputs
    ```
 
 4. **Firebase Setup**
@@ -177,6 +177,27 @@ json_annotation: ^4.8.1
    ```bash
    flutter run
    ```
+
+### Code Generation
+After making changes to models or API interfaces, run:
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+For continuous code generation during development:
+```bash
+dart run build_runner watch --delete-conflicting-outputs
+```
+
+### Codemagic CI/CD
+The project includes a `codemagic.yaml` configuration file for automated builds. The workflow:
+1. Sets up Flutter environment
+2. Gets dependencies
+3. Generates code using build_runner
+4. Runs analysis and tests
+5. Builds APK, AAB, and iOS artifacts
+
+Make sure to commit the `pubspec.lock` file to ensure consistent builds across environments.
 
 ## 📊 Data Models
 

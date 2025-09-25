@@ -7,12 +7,22 @@ import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/theme_provider.dart';
+import 'core/models/user_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize Hive
   await Hive.initFlutter();
+  
+  // Register Hive Adapters
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(SellerProfileAdapter());
+  Hive.registerAdapter(SellerAnalyticsAdapter());
+  Hive.registerAdapter(UserRoleAdapter());
+  Hive.registerAdapter(BusinessCategoryAdapter());
+  Hive.registerAdapter(SellerStatusAdapter());
+  Hive.registerAdapter(SubscriptionPlanAdapter());
   
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([

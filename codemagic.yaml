@@ -1,0 +1,55 @@
+workflows:
+  flutter-workflow:
+    name: Flutter Workflow
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        - keystore_reference
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.ocean.app
+      vars:
+        FLUTTER_VERSION: "3.19.6"
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Generate code
+        script: |
+          dart run build_runner build --delete-conflicting-outputs
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter test
+        script: |
+          flutter test
+      - name: Build APK with Flutter
+        script: |
+          flutter build apk --release
+      - name: Build AAB with Flutter
+        script: |
+          flutter build appbundle --release
+      - name: Build iOS with Flutter
+        script: |
+          flutter build ios --release --no-codesign
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user@example.com
+        notify:
+          success: true
+          failure: false

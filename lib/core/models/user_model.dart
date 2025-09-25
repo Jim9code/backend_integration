@@ -1,24 +1,42 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'user_model.g.dart';
 
+@HiveType(typeId: 0)
 @JsonSerializable()
 class User {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String email;
+  @HiveField(2)
   final String fullName;
+  @HiveField(3)
   final String? profilePicture;
+  @HiveField(4)
   final String? bio;
+  @HiveField(5)
   final String? location;
+  @HiveField(6)
   final String? phoneNumber;
+  @HiveField(7)
   final UserRole role;
+  @HiveField(8)
   final DateTime createdAt;
+  @HiveField(9)
   final DateTime updatedAt;
+  @HiveField(10)
   final int followersCount;
+  @HiveField(11)
   final int followingCount;
+  @HiveField(12)
   final int postsCount;
+  @HiveField(13)
   final bool isVerified;
+  @HiveField(14)
   final bool isActive;
+  @HiveField(15)
   final SellerProfile? sellerProfile;
 
   const User({
@@ -82,22 +100,38 @@ class User {
   }
 }
 
+@HiveType(typeId: 1)
 @JsonSerializable()
 class SellerProfile {
+  @HiveField(0)
   final String businessName;
+  @HiveField(1)
   final BusinessCategory businessCategory;
+  @HiveField(2)
   final String businessLocation;
+  @HiveField(3)
   final String businessPhone;
+  @HiveField(4)
   final String businessEmail;
+  @HiveField(5)
   final String? businessDescription;
+  @HiveField(6)
   final String? businessWebsite;
+  @HiveField(7)
   final List<String> businessDocuments;
+  @HiveField(8)
   final String personalId;
+  @HiveField(9)
   final SellerStatus status;
+  @HiveField(10)
   final DateTime? approvedAt;
+  @HiveField(11)
   final String? rejectionReason;
+  @HiveField(12)
   final SubscriptionPlan? currentPlan;
+  @HiveField(13)
   final DateTime? planExpiresAt;
+  @HiveField(14)
   final SellerAnalytics analytics;
 
   const SellerProfile({
@@ -123,13 +157,20 @@ class SellerProfile {
   Map<String, dynamic> toJson() => _$SellerProfileToJson(this);
 }
 
+@HiveType(typeId: 2)
 @JsonSerializable()
 class SellerAnalytics {
+  @HiveField(0)
   final int totalViews;
+  @HiveField(1)
   final int totalLikes;
+  @HiveField(2)
   final int totalSales;
+  @HiveField(3)
   final double totalRevenue;
+  @HiveField(4)
   final int productsCount;
+  @HiveField(5)
   final double engagementRate;
 
   const SellerAnalytics({
@@ -146,42 +187,60 @@ class SellerAnalytics {
   Map<String, dynamic> toJson() => _$SellerAnalyticsToJson(this);
 }
 
+@HiveType(typeId: 3)
 enum UserRole {
+  @HiveField(0)
   @JsonValue('buyer')
   buyer,
+  @HiveField(1)
   @JsonValue('seller')
   seller,
+  @HiveField(2)
   @JsonValue('admin')
   admin,
 }
 
+@HiveType(typeId: 4)
 enum BusinessCategory {
+  @HiveField(0)
   @JsonValue('retailer')
   retailer,
+  @HiveField(1)
   @JsonValue('wholesaler')
   wholesaler,
+  @HiveField(2)
   @JsonValue('manufacturer')
   manufacturer,
+  @HiveField(3)
   @JsonValue('distributor')
   distributor,
 }
 
+@HiveType(typeId: 5)
 enum SellerStatus {
+  @HiveField(0)
   @JsonValue('pending')
   pending,
+  @HiveField(1)
   @JsonValue('approved')
   approved,
+  @HiveField(2)
   @JsonValue('rejected')
   rejected,
+  @HiveField(3)
   @JsonValue('suspended')
   suspended,
 }
 
+@HiveType(typeId: 6)
 enum SubscriptionPlan {
+  @HiveField(0)
   @JsonValue('basic')
   basic,
+  @HiveField(1)
   @JsonValue('premium')
   premium,
+  @HiveField(2)
   @JsonValue('enterprise')
   enterprise,
 }
