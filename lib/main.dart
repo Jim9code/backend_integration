@@ -8,6 +8,9 @@ import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/models/user_model.dart';
+import 'core/models/post_model.dart';
+import 'core/models/product_model.dart';
+import 'core/models/chat_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +18,7 @@ void main() async {
   // Initialize Hive
   await Hive.initFlutter();
   
-  // Register Hive Adapters
+  // Register Hive Adapters - Updated for latest Hive version
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(SellerProfileAdapter());
   Hive.registerAdapter(SellerAnalyticsAdapter());
@@ -23,6 +26,30 @@ void main() async {
   Hive.registerAdapter(BusinessCategoryAdapter());
   Hive.registerAdapter(SellerStatusAdapter());
   Hive.registerAdapter(SubscriptionPlanAdapter());
+  
+  // Register additional adapters for other models
+  Hive.registerAdapter(PostAdapter());
+  Hive.registerAdapter(PostMediaAdapter());
+  Hive.registerAdapter(PostEngagementAdapter());
+  Hive.registerAdapter(CommentAdapter());
+  Hive.registerAdapter(PostCategoryAdapter());
+  Hive.registerAdapter(PostMediaTypeAdapter());
+  Hive.registerAdapter(PostStatusAdapter());
+  
+  Hive.registerAdapter(ProductAdapter());
+  Hive.registerAdapter(ARModelAdapter());
+  Hive.registerAdapter(ProductDimensionsAdapter());
+  Hive.registerAdapter(ProductCategoryAdapter());
+  Hive.registerAdapter(ProductConditionAdapter());
+  Hive.registerAdapter(ProductStatusAdapter());
+  
+  Hive.registerAdapter(ChatAdapter());
+  Hive.registerAdapter(MessageAdapter());
+  Hive.registerAdapter(MessageAttachmentAdapter());
+  Hive.registerAdapter(ChatTypeAdapter());
+  Hive.registerAdapter(MessageTypeAdapter());
+  Hive.registerAdapter(MessageStatusAdapter());
+  Hive.registerAdapter(MessageAttachmentTypeAdapter());
   
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([

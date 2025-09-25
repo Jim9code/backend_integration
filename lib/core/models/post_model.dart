@@ -1,26 +1,46 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'post_model.g.dart';
 
+@HiveType(typeId: 20)
 @JsonSerializable()
 class Post {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String userId;
+  @HiveField(2)
   final String caption;
+  @HiveField(3)
   final List<PostMedia> media;
+  @HiveField(4)
   final PostCategory category;
+  @HiveField(5)
   final List<String> tags;
+  @HiveField(6)
   final String? location;
+  @HiveField(7)
   final PostStatus status;
+  @HiveField(8)
   final DateTime createdAt;
+  @HiveField(9)
   final DateTime updatedAt;
+  @HiveField(10)
   final int likesCount;
+  @HiveField(11)
   final int commentsCount;
+  @HiveField(12)
   final int sharesCount;
+  @HiveField(13)
   final int savesCount;
+  @HiveField(14)
   final bool isLiked;
+  @HiveField(15)
   final bool isSaved;
+  @HiveField(16)
   final String? productId;
+  @HiveField(17)
   final PostEngagement engagement;
 
   const Post({
@@ -90,15 +110,24 @@ class Post {
   }
 }
 
+@HiveType(typeId: 21)
 @JsonSerializable()
 class PostMedia {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final PostMediaType type;
+  @HiveField(2)
   final String url;
+  @HiveField(3)
   final String? thumbnailUrl;
+  @HiveField(4)
   final double? duration;
+  @HiveField(5)
   final int? width;
+  @HiveField(6)
   final int? height;
+  @HiveField(7)
   final int order;
 
   const PostMedia({
@@ -117,11 +146,16 @@ class PostMedia {
   Map<String, dynamic> toJson() => _$PostMediaToJson(this);
 }
 
+@HiveType(typeId: 22)
 @JsonSerializable()
 class PostEngagement {
+  @HiveField(0)
   final double engagementRate;
+  @HiveField(1)
   final int viewsCount;
+  @HiveField(2)
   final int clicksCount;
+  @HiveField(3)
   final Map<String, int> reactionCounts;
 
   const PostEngagement({
@@ -136,17 +170,28 @@ class PostEngagement {
   Map<String, dynamic> toJson() => _$PostEngagementToJson(this);
 }
 
+@HiveType(typeId: 23)
 @JsonSerializable()
 class Comment {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String postId;
+  @HiveField(2)
   final String userId;
+  @HiveField(3)
   final String content;
+  @HiveField(4)
   final String? parentCommentId;
+  @HiveField(5)
   final DateTime createdAt;
+  @HiveField(6)
   final DateTime updatedAt;
+  @HiveField(7)
   final int likesCount;
+  @HiveField(8)
   final int repliesCount;
+  @HiveField(9)
   final bool isLiked;
 
   const Comment({
@@ -166,37 +211,53 @@ class Comment {
   Map<String, dynamic> toJson() => _$CommentToJson(this);
 }
 
+@HiveType(typeId: 24)
 enum PostCategory {
+  @HiveField(0)
   @JsonValue('product_demand')
   productDemand,
+  @HiveField(1)
   @JsonValue('bulk_purchase')
   bulkPurchase,
+  @HiveField(2)
   @JsonValue('distress_sales')
   distressSales,
+  @HiveField(3)
   @JsonValue('heavy_distributors')
   heavyDistributors,
+  @HiveField(4)
   @JsonValue('swap_deals')
   swapDeals,
+  @HiveField(5)
   @JsonValue('auctions')
   auctions,
+  @HiveField(6)
   @JsonValue('general')
   general,
 }
 
+@HiveType(typeId: 25)
 enum PostMediaType {
+  @HiveField(0)
   @JsonValue('image')
   image,
+  @HiveField(1)
   @JsonValue('video')
   video,
 }
 
+@HiveType(typeId: 26)
 enum PostStatus {
+  @HiveField(0)
   @JsonValue('active')
   active,
+  @HiveField(1)
   @JsonValue('inactive')
   inactive,
+  @HiveField(2)
   @JsonValue('deleted')
   deleted,
+  @HiveField(3)
   @JsonValue('reported')
   reported,
 }

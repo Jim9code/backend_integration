@@ -20,8 +20,8 @@ workflows:
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
       - name: Get Flutter packages
         script: |
-          flutter packages pub get
-      - name: Generate code
+          flutter pub get
+      - name: Generate code with build_runner
         script: |
           dart run build_runner build --delete-conflicting-outputs
       - name: Flutter analyze
